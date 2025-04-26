@@ -43,10 +43,10 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NUXT_PUBLIC_API_BASE=http://backend:4000/api/v1/
-      - BASE_URL=http://backend:4000/api/v1/
-      - APP_URL=http://backend:4000/api/v1/
-      - AUTH_ORIGIN=http://backend:4000/api/v1/
+      - NUXT_PUBLIC_API_BASE="http://backend:4000/api/v1/"
+      - BASE_URL="http://backend:4000/api/v1/"
+      - APP_URL="http://backend:4000/api/v1/"
+      - AUTH_ORIGIN="http://backend:4000/api/v1/"
       - NUXT_SESSION_PASSWORD=${NUXT_SESSION_PASSWORD}
     # volumes:
     #   - ../frontend:/app
