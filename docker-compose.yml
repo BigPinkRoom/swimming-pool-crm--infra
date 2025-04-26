@@ -18,18 +18,20 @@ services:
   mysql:
     image: mysql:8.0 # или mysql:5.7
     environment:
-      - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_DATABASE=myapp
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=user_password
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     ports:
-      - "330:3306" # Пробрасываем порт для доступа с хоста (опционально)
+      - "3307:3306" # Пробрасываем порт для доступа с хоста (опционально)
     volumes:
       - mysql_data:/var/lib/mysql # Сохраняем данные между перезапусками
+    command: >
+      --default-authentication-plugin=mysql_native_password
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql"]
       interval: 5s
-      timeout: 10s
+      timeout: 60s
       retries: 5
 
   frontend:
