@@ -1,7 +1,7 @@
 services:
   backend:
     build:
-      context: ../backend
+      context: ../abonements-backend
     image: repertuar/backend-app:latest
     ports:
       - "4000:4000"
@@ -37,16 +37,18 @@ services:
       retries: 5
 
   frontend:
-    # build:
-    #   context: ../frontend
+    build:
+      context: ../swimming-pool-crm
     image: repertuar/frontend-app:latest
     ports:
+      - "5173:5173"
       - "3000:3000"
     environment:
-      - NUXT_PUBLIC_API_BASE="http://backend:4000/api/v1/"
-      - BASE_URL="http://backend:4000/api/v1/"
-      - APP_URL="http://backend:4000/api/v1/"
-      - AUTH_ORIGIN="http://backend:4000/api/v1/"
+      - NUXT_VITE_HMR_PORT=5173
+      - NUXT_PUBLIC_API_BASE=http://backend:4000/api/v1/
+      - BASE_URL=http://backend:4000/api/v1/
+      - APP_URL=http://backend:4000/api/v1/
+      - AUTH_ORIGIN=http://backend:4000/api/v1/
       - NUXT_SESSION_PASSWORD=${NUXT_SESSION_PASSWORD}
     # volumes:
     #   - ../frontend:/app
