@@ -1,18 +1,49 @@
-version: "3.8"
-
 services:
   backend:
     image: repertuar/backend-app:latest
     ports:
       - "4000:4000"
     environment:
-      - NODE_ENV=production
+      - SESSION_SECRET=${SESSION_SECRET}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - AUTH_SECRET=${AUTH_SECRET}
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.0 # или mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=myapp
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user_password
+    ports:
+      - "330:3306" # Пробрасываем порт для доступа с хоста (опционально)
+    volumes:
+      - mysql_data:/var/lib/mysql # Сохраняем данные между перезапусками
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
 
   frontend:
     image: repertuar/frontend-app:latest
     ports:
       - "3000:3000"
     environment:
-      - API_BASE_URL=http://backend:3000
+      - NUXT_PUBLIC_API_BASE=${NUXT_PUBLIC_API_BASE}
+      - BASE_URL=${BASE_URL}
+      - APP_URL=${APP_URL}
+      - AUTH_ORIGIN=${AUTH_ORIGIN}
+      - NUXT_SESSION_PASSWORD=${NUXT_SESSION_PASSWORD}
     depends_on:
       - backend
+
+volumes:
+  mysql_data:
