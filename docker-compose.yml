@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  backend:
+    image: repertuar/backend-app:latest
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+
+  frontend:
+    image: repertuar/frontend-app:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - API_BASE_URL=http://backend:3000
+    depends_on:
+      - backend
