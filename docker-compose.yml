@@ -37,7 +37,7 @@ services:
   frontend:
     image: repertuar/frontend-app:latest
     ports:
-      - "3000:3000"
+      - "80:80"
     environment:
       - NUXT_PUBLIC_API_BASE=${NUXT_PUBLIC_API_BASE}
       - BASE_URL=${BASE_URL}
