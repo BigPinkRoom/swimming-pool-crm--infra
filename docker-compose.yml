@@ -1,7 +1,7 @@
 services:
   backend:
     build:
-      context: ../abonements-backend
+      context: ../backend
     image: repertuar/backend-app:latest
     ports:
       - "4000:4000"
@@ -38,7 +38,7 @@ services:
 
   frontend:
     build:
-      context: ../swimming-pool-crm
+      context: ../frontend
     image: repertuar/frontend-app:latest
     ports:
       - "5173:5173"
@@ -50,8 +50,8 @@ services:
       - APP_URL=http://backend:4000/api/v1/
       - AUTH_ORIGIN=http://backend:4000/api/v1/
       - NUXT_SESSION_PASSWORD=${NUXT_SESSION_PASSWORD}
-    volumes:
-      - ../frontend:/app
+    # volumes:
+    #   - ../frontend:/app
     depends_on:
       - backend
   nginx:
