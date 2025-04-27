@@ -7,7 +7,7 @@ services:
         - NODE_ENV=production
     ports:
       - "4000:4000"
-    command: npm run start # Запуск в production-режиме
+    command: npm run dev # Запуск в production-режиме (нужно изменить на start!!!!!!!!!!!)
     environment:
       - NODE_ENV=production
 
