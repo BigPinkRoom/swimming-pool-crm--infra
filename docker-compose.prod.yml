@@ -1,0 +1,26 @@
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=production
+    ports:
+      - "4000:4000"
+    command: npm run start # Запуск в production-режиме
+    environment:
+      - NODE_ENV=production
+
+  frontend:
+    build:
+      context: ../frontend
+      args:
+        - NODE_ENV=production
+    ports:
+      - "3000:3000"
+    command: npm run build && npm run start # Сборка и запуск
+    environment:
+      - NODE_ENV=production
+
+  mysql:
+    ports: [] # Убираем проброс портов для безопасности

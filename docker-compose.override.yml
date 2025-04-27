@@ -1,0 +1,29 @@
+services:
+  backend:
+    build:
+      context: ../abonements-backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4000:4000" # Проброс порта для отладки
+    volumes:
+      - ../backend:/app # Синхронизация локальных файлов
+    command: npm run dev # Запуск в режиме разработки
+    environment:
+      - NODE_ENV=development
+
+  frontend:
+    build:
+      context: ../swimming-pool-crm
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173" # HMR порт
+      - "3000:3000" # Порт для фронтенда
+    volumes:
+      - ../frontend:/app # Синхронизация локальных файлов
+    command: npm run dev # Запуск в режиме разработки
+    environment:
+      - NODE_ENV=development
+
+  mysql:
+    ports:
+      - "3307:3306" # Проброс порта MySQL для доступа с хоста
