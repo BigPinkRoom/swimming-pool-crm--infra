@@ -1,7 +1,7 @@
 services:
   backend:
     build:
-      context: ../backend
+      context: ./abonements-backend
       dockerfile: Dockerfile
       args:
         - NODE_ENV=production
@@ -13,7 +13,7 @@ services:
 
   frontend:
     build:
-      context: ../frontend
+      context: ./swimming-pool-crm
       args:
         - NODE_ENV=production
     ports:
