@@ -1,3 +1,7 @@
+networks:
+  app-network:
+    driver: bridge
+
 services:
   backend:
     build:
@@ -5,6 +9,8 @@ services:
     image: repertuar/backend-app:latest
     ports:
       - "4000:4000"
+    networks:
+      - app-network
     environment:
       - SESSION_SECRET=${SESSION_SECRET}
       - DB_HOST=${DB_HOST}
@@ -30,6 +36,8 @@ services:
       - mysql_data:/var/lib/mysql # Сохраняем данные между перезапусками
     command: >
       --default-authentication-plugin=mysql_native_password
+    networks:
+      - app-network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "mysql"]
       interval: 5s
@@ -43,6 +51,8 @@ services:
     ports:
       - "5173:5173"
       - "3000:3000"
+    networks:
+      - app-network
     environment:
       - NUXT_VITE_HMR_PORT=5173
       - NUXT_PUBLIC_API_BASE=http://nginx/api/v1/
@@ -63,5 +73,6 @@ services:
     depends_on:
       - frontend
       - backend
+
 volumes:
   mysql_data:
