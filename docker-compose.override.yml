@@ -6,7 +6,7 @@ services:
     ports:
       - "4000:4000" # Проброс порта для отладки
     volumes:
-      - ../backend:/app # Синхронизация локальных файлов
+      - ../abonements-backend:/app # Синхронизация локальных файлов
     command: npm run dev # Запуск в режиме разработки
     environment:
       - NODE_ENV=development
@@ -19,7 +19,7 @@ services:
       - "5173:5173" # HMR порт
       - "3000:3000" # Порт для фронтенда
     volumes:
-      - ../frontend:/app # Синхронизация локальных файлов
+      - ../swimming-pool-crm:/app # Синхронизация локальных файлов
     command: npm run dev # Запуск в режиме разработки
     environment:
       - NODE_ENV=development
