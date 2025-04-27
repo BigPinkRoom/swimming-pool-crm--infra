@@ -25,7 +25,7 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     ports:
-      - "3306:3306" # Пробрасываем порт для доступа с хоста (опционально)
+      - "3307:3306" # Пробрасываем порт для доступа с хоста (опционально)
     volumes:
       - mysql_data:/var/lib/mysql # Сохраняем данные между перезапусками
     command: >
@@ -45,10 +45,10 @@ services:
       - "3000:3000"
     environment:
       - NUXT_VITE_HMR_PORT=5173
-      - NUXT_PUBLIC_API_BASE=http://localhost:4000/api/v1/
-      - BASE_URL=http://localhost:4000/api/v1/
-      - APP_URL=http://localhost:4000/api/v1/
-      - AUTH_ORIGIN=http://localhost:4000/api/v1/
+      - NUXT_PUBLIC_API_BASE=http://nginx/api/v1/
+      - BASE_URL=http://nginx/api/v1/
+      - APP_URL=http://nginx/api/v1/
+      - AUTH_ORIGIN=http://nginx/api/v1/
       - NUXT_SESSION_PASSWORD=${NUXT_SESSION_PASSWORD}
     # volumes:
     #   - ../frontend:/app
