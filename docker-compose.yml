@@ -49,11 +49,8 @@ services:
       - app-network
     environment:
       - NUXT_VITE_HMR_PORT=5173
-      - NUXT_PUBLIC_API_BASE=${NUXT_PUBLIC_API_BASE}
-      - BASE_URL=${BASE_URL}
-      - APP_URL=${APP_URL}
-      - AUTH_ORIGIN=${AUTH_ORIGIN}
-      - NUXT_SESSION_PASSWORD=${NUXT_SESSION_PASSWORD}
+      - NUXT_PUBLIC_BASE_URL=${NUXT_PUBLIC_BASE_URL}
+      - NUXT_BASE_PRIVATE_URL=${NUXT_BASE_PRIVATE_URL}
     depends_on:
       - backend
 
@@ -68,10 +65,36 @@ services:
     depends_on:
       - frontend
       - backend
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.enabled=false # Отключаем аутентификацию для разработки
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - elastic-net
+
+  kibana: # Опционально - веб-интерфейс
+    image: docker.elastic.co/kibana/kibana:8.12.0
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    networks:
+      - elastic-net
 
 networks:
   app-network:
     driver: bridge
+  elastic-net:
+    driver: bridge
 
 volumes:
   mysql_data:
+  es_data:
+    driver: local
