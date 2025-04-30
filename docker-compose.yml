@@ -4,6 +4,7 @@ services:
       context: ../backend
       dockerfile: Dockerfile
     image: repertuar/backend-app:latest
+    container_name: back
     networks:
       - app-network
     environment:
@@ -14,12 +15,17 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
       - AUTH_SECRET=${AUTH_SECRET}
+      - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
     depends_on:
       mysql:
         condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    working_dir: /app
 
   mysql:
     image: mysql:8.0
+    container_name: db
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -28,12 +34,13 @@ services:
     volumes:
       - ./my.cnf:/etc/mysql/my.cnf
       - mysql_data:/var/lib/mysql
-    command: >
-      --character-set-server=utf8mb4 
-      --collation-server=utf8mb4_unicode_ci
-      --default-authentication-plugin=mysql_native_password
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump2.sql
     networks:
       - app-network
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --default-authentication-plugin=mysql_native_password
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "mysql"]
       interval: 5s
@@ -45,6 +52,7 @@ services:
       context: ../frontend
       dockerfile: Dockerfile
     image: repertuar/frontend-app:latest
+    container_name: fr
     networks:
       - app-network
     environment:
@@ -66,7 +74,7 @@ services:
       - frontend
       - backend
   elasticsearch:
-    image: bitnami/elasticsearch:8.13.1
+    image: bitnami/elasticsearch:9.0.0
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
@@ -74,27 +82,30 @@ services:
       - xpack.security.enabled=false # Отключаем аутентификацию для разработки
     volumes:
       - es_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
     ports:
       - "9200:9200"
     networks:
-      - elastic-net
+      - app-network
 
   kibana: # Опционально - веб-интерфейс
-    image: bitnami/kibana:8.13.1
+    image: bitnami/kibana:9.0.0
+    container_name: kb
     depends_on:
       - elasticsearch
     ports:
       - "5601:5601"
     networks:
-      - elastic-net
+      - app-network
 
 networks:
   app-network:
-    driver: bridge
-  elastic-net:
     driver: bridge
 
 volumes:
   mysql_data:
   es_data:
-    driver: local

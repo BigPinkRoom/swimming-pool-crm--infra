@@ -7,7 +7,7 @@ services:
       - "4000:4000" # Проброс порта для отладки
     volumes:
       - ../abonements-backend:/app # Синхронизация локальных файлов
-    command: npm run dev # Запуск в режиме разработки
+    command: sh -c "node createIndexes.js && npm run dev"
     environment:
       - NODE_ENV=development
 
