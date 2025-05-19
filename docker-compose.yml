@@ -59,6 +59,8 @@ services:
       - NUXT_VITE_HMR_PORT=5173
       - NUXT_PUBLIC_BASE_URL=${NUXT_PUBLIC_BASE_URL}
       - NUXT_BASE_PRIVATE_URL=${NUXT_BASE_PRIVATE_URL}
+      - TESTS_LOGIN=${TESTS_LOGIN}
+      - TESTS_PASSWORD=${TESTS_PASSWORD}
     depends_on:
       - backend
 
