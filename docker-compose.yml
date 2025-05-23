@@ -4,7 +4,7 @@ services:
       context: ../backend
       dockerfile: Dockerfile
     image: repertuar/backend-app:latest
-    container_name: back
+    container_name: backend
     networks:
       - app-network
     environment:
@@ -52,7 +52,7 @@ services:
       context: ../frontend
       dockerfile: Dockerfile
     image: repertuar/frontend-app:latest
-    container_name: fr
+    container_name: frontend
     networks:
       - app-network
     environment:
