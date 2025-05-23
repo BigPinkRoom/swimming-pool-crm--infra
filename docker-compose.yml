@@ -34,7 +34,7 @@ services:
     volumes:
       - ./my.cnf:/etc/mysql/my.cnf
       - mysql_data:/var/lib/mysql
-      - ./dump.sql:/docker-entrypoint-initdb.d/dump2.sql
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
     networks:
       - app-network
     command: >
